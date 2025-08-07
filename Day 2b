@@ -1,0 +1,275 @@
+Employee Table
+Step 1: Create the Employee Table
+CREATE TABLE Employee (
+    EmpID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Department VARCHAR(50),
+    Gender VARCHAR(10),
+    Salary DECIMAL(10, 2),
+    Age INT,
+    Experience INT
+);
+Inserting the table
+
+INSERT INTO Employee (EmpID, Name, Department, Gender, Salary, Age, Experience) VALUES
+(1, 'Alice', 'HR', 'Female', 50000, 28, 3),
+(2, 'Bob', 'Finance', 'Male', 60000, 32, 5),
+(3, 'Charlie', 'IT', 'Male', 70000, 30, 6),
+(4, 'David', 'HR', 'Male', 48000, 45, 20),
+(5, 'Eva', 'IT', 'Female', 72000, 29, 4),
+(6, 'Frank', 'Finance', 'Male', 58000, 35, 8),
+(7, 'Grace', 'Marketing', 'Female', 50000, 27, 2),
+(8, 'Hannah', 'IT', 'Female', 75000, 31, 7),
+(9, 'Ivy', 'Finance', 'Female', 62000, 26, 3),
+(10, 'Jack', 'Marketing', 'Male', 52000, 38, 10),
+(11, 'Kiran', 'IT', 'Male', 68000, 33, 9),
+(12, 'Lily', 'HR', 'Female', 55000, 40, 15),
+(13, 'Mohan', 'Finance', 'Male', 61000, 29, 4),
+(14, 'Nina', 'Marketing', 'Female', 53000, 36, 11),
+(15, 'Oscar', 'IT', 'Male', 71000, 34, 10);
+
+
+Question:-
+A.	Find total salary per department.
+ select department,sum(salary) from employee group by department;
++------------+-------------+
+| department | sum(salary) |
++------------+-------------+
+| hr         |   153000.00 |
+| Finance    |   241000.00 |
+| IT         |   356000.00 |
+| Marketing  |   155000.00 |
++------------+-------------+
+
+B.	List departments where total salary exceeds 200000.
+                     select department,sum(salary) from employee group by department havin
+g sum(salary)>200000;
++------------+-------------+
+| department | sum(salary) |
++------------+-------------+
+| Finance    |   241000.00 |
+| IT         |   356000.00 |
++------------+-------------+
+
+C.	Count number of employees in each department.
+ select department,count(department) from employee group by department;
++------------+-------------------+
+| department | count(department) |
++------------+-------------------+
+| hr         |                 3 |
+| Finance    |                 4 |
+| IT         |                 5 |
+| Marketing  |                 3 |
++------------+-------------------+
+
+D.	List departments with more than 3 employees.
+
+ select department,count() from employee group by department having count()>3;
++------------+----------+
+| department | count(*) |
++------------+----------+
+| Finance    |        4 |
+| IT         |        5 |
++------------+----------+
+
+E.	Find average salary by gender.
+select gender,avg(salary) from employee group by gender;
++--------+--------------+
+| gender | avg(salary)  |
++--------+--------------+
+| female | 59571.428571 |
+| Male   | 61000.000000 |
++--------+--------------+
+
+F.	Show gender-wise employee count, only if count is more than 5.
+ select gender,count() from employee group by gender having count() >5;
++--------+----------+
+| gender | count(*) |
++--------+----------+
+| female |        7 |
+| Male   |        8 |
++--------+----------+
+
+G.	List departments with average salary above 60000.
+select department,avg(salary) from employee group by department having avg(salary)>6
+0000;
++------------+--------------+
+| department | avg(salary)  |
++------------+--------------+
+| Finance    | 60250.000000 |
+| IT         | 71200.000000 |
++------------+--------------+
+
+H.	List number of male and female employees per department.
+select department,gender,count(*) from employee group by department,gender;
++------------+--------+----------+
+| department | gender | count(*) |
++------------+--------+----------+
+| hr         | female |        2 |
+| Finance    | Male   |        3 |
+| IT         | Male   |        3 |
+| HR         | Male   |        1 |
+| IT         | Female |        2 |
+| Marketing  | Female |        2 |
+| Finance    | Female |        1 |
+| Marketing  | Male   |        1 |
++------------+--------+----------+
+
+I.	Find departments where the average experience is more than 7 years.
+select department ,avg(experience)from employee group by department having avg(exper
+ience)>7;
++------------+-----------------+
+| department | avg(experience) |
++------------+-----------------+
+| hr         |         12.6667 |
+| IT         |          7.2000 |
+| Marketing  |          7.6667 |
++------------+-----------------+
+
+J.	List departments where the max salary is above 70000.
+ select department ,max(salary) from employee group by department having max(salary)>70000;
++------------+-------------+
+| department | max(salary) |
++------------+-------------+
+| IT         |    75000.00 |
++------------+-------------+
+
+K.	Find average age by department.
+ select department,avg(age) from employee group by department;
++------------+----------+
+| department | avg(age) |
++------------+----------+
+| hr         |  37.6667 |
+| Finance    |  30.5000 |
+| IT         |  31.4000 |
+| Marketing  |  33.6667 |
++------------+----------+
+
+L.	List all departments where female employees earn more than 60000 on average.
+select department,avg(salary) from employee where gender='female' group by departmen
+t having avg(salary)>60000;
++------------+--------------+
+| department | avg(salary)  |
++------------+--------------+
+| IT         | 73500.000000 |
+| Finance    | 62000.000000 |
++------------+--------------+
+
+M.	Find departments with total experience greater than 20 years.
+ select department,sum(experience) from employee group by department having sum(exper
+ience)>20;
++------------+-----------------+
+| department | sum(experience) |
++------------+-----------------+
+| hr         |              38 |
+| IT         |              36 |
+| Marketing  |              23 |
++------------+-----------------+
+
+N.	Find gender-wise average experience per department.
+ select department,gender,avg(experience) from employee group by department,gender;
++------------+--------+-----------------+
+| department | gender | avg(experience) |
++------------+--------+-----------------+
+| hr         | female |          9.0000 |
+| Finance    | Male   |          5.6667 |
+| IT         | Male   |          8.3333 |
+| HR         | Male   |         20.0000 |
+| IT         | Female |          5.5000 |
+| Marketing  | Female |          6.5000 |
+| Finance    | Female |          3.0000 |
+| Marketing  | Male   |         10.0000 |
++------------+--------+-----------------+
+
+O.	List departments where average age is under 30.
+ select department ,avg(age) from employee group by department having avg(age)>30;
++------------+----------+
+| department | avg(age) |
++------------+----------+
+| hr         |  37.6667 |
+| Finance    |  30.5000 |
+| IT         |  31.4000 |
+| Marketing  |  33.6667 |
++------------+----------+
+
+P.	Find departments where more than one female is working.
+  select department , count(gender) from employee where gender='female' group by department having count(gender)>1;
++------------+---------------+
+| department | count(gender) |
++------------+---------------+
+| hr         |             2 |
+| IT         |             2 |
+| Marketing  |             2 |
++------------+---------------+
+
+Q.	Find departments where both male and female employees exist.
+> SELECT Department FROM Employee  GROUP BY Department HAVING COUNT(DISTINCT Gender) = 2;
++------------+
+| Department |
++------------+
+| Finance    |
+| hr         |
+| IT         |
+| Marketing  |
++------------+
+
+R.	List departments with highest average experience.
+ select department,avg(experience) from employee group by department order by avg(experience) desc limit 1;
++------------+-----------------+
+| department | avg(experience) |
++------------+-----------------+
+| hr         |         12.6667 |
++------------+-----------------+
+
+S.	Find gender and department combinations where total salary is above 100000.
+  select gender,department ,sum(salary)from employee group by departmen
+t,gender having sum(salary)>100000;
++--------+------------+-------------+
+| gender | department | sum(salary) |
++--------+------------+-------------+
+| female | hr         |   105000.00 |
+| Male   | Finance    |   179000.00 |
+| Male   | IT         |   209000.00 |
+| Female | IT         |   147000.00 |
+| Female | Marketing  |   103000.00 |
++--------+------------+-------------+
+T.	Show department-wise count of employees under age 35.
+select department,count(*) from employee where age<35 group by depart
+ment;
++------------+----------+
+| department | count(*) |
++------------+----------+
+| hr         |        1 |
+| Finance    |        3 |
+| IT         |        5 |
+| Marketing  |        1 |
++------------+----------+
+U.	List top 3 departments with highest total salary.
+select department,sum(salary) from employee group by department orde
+r by sum(salary) desc limit 3 ;
++------------+-------------+
+| department | sum(salary) |
++------------+-------------+
+| IT         |   356000.00 |
+| Finance    |   241000.00 |
+| Marketing  |   155000.00 |
++------------+-------------+
+V.	List departments where all employees have more than 5 years of experience.
+select department from employee where experience>5 group by departmen
+t;
++------------+
+| department |
++------------+
+| IT         |
+| HR         |
+| Finance    |
+| Marketing  |
++------------+
+W.	Find departments where at least one employee earns less than 55000.
+select distinct department from employee where salary<55000;
++------------+
+| department |
++------------+
+| hr         |
+| Marketing  |
++------------+
