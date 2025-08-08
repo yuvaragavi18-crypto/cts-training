@@ -1,0 +1,441 @@
+Creating the table
+CREATE TABLE reaction (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(100),
+    reaction_type VARCHAR(20),
+    post_id INT,
+    created_at DATETIME,
+    location VARCHAR(100),
+    mood_level INT,
+    comment TEXT
+);
+
+Inserting the data
+INSERT INTO reaction (user_name, reaction_type, post_id, created_at, location, mood_level, comment) VALUES
+('Alice', 'like', 101, '2025-08-07 10:15:00', 'New York', 8, 'Nice post!'),
+('Bob', 'love', 102, '2025-08-06 14:20:00', 'Los Angeles', 9, 'Awesome!'),
+('Charlie', 'angry', 101, '2025-08-05 09:10:00', 'Chicago', 3, NULL),
+('Diana', 'wow', 103, '2025-08-07 08:30:00', 'Miami', 7, 'Interesting point.'),
+('Ethan', 'sad', 104, '2025-08-04 16:45:00', 'Dallas', 2, NULL),
+('Fiona', 'love', 102, '2025-08-07 12:00:00', 'Boston', 6, 'Well said.'),
+('George', 'like', 105, '2025-08-03 11:25:00', 'Seattle', 5, NULL),
+('Hannah', 'like', 106, '2025-08-07 15:50:00', 'Denver', 9, 'Completely agree!'),
+('Ian', 'angry', 107, '2025-08-06 13:15:00', 'Phoenix', 4, 'Not okay with this.'),
+('Jane', 'sad', 108, '2025-08-02 18:40:00', 'Atlanta', 1, NULL),
+('Sam', 'like', 101, '2025-08-07 10:50:00', 'New York', 8, '🔥🔥🔥'),
+('Anita', 'wow', 109, '2025-08-01 20:10:00', 'Houston', 7, NULL),
+('Brian', 'love', 110, '2025-08-07 09:05:00', 'San Francisco', 10, 'Fantastic work!'),
+('Catherine', 'like', 111, '2025-08-07 08:55:00', 'New York', 6, NULL),
+('Daniel', 'angry', 112, '2025-08-05 17:35:00', 'Chicago', 2, NULL);
+ 
+LIKE
+Write a query to find all reactions made by users whose names start with the letter 'A'.
+ select * from reaction where user_name like 'a%';
++----+-----------+---------------+---------+---------------------+----------+------------+------------+
+| id | user_name | reaction_type | post_id | created_at          | location | mood_level | comment    |
++----+-----------+---------------+---------+---------------------+----------+------------+------------+
+|  1 | Alice     | like          |     101 | 2025-08-07 10:15:00 | New York |          8 | Nice post! |
+|  2 | Alice     | like          |     101 | 2025-08-07 10:15:00 | New York |          8 | Nice post! |
+| 13 | Anita     | wow           |     109 | 2025-08-01 20:10:00 | Houston  |          7 | NULL       |
++----+-----------+---------------+---------+---------------------+----------+------------+------------+
+
+AS (Alias)
+Write a query to display user_name as Reactor and reaction_type as Type.
+> select user_name as Reactor,reaction_type as Type from reaction;
++-----------+-------+
+| Reactor   | Type  |
++-----------+-------+
+| Alice     | like  |
+| Alice     | like  |
+| Bob       | love  |
+| Charlie   | angry |
+| Diana     | wow   |
+| Ethan     | sad   |
+| Fiona     | love  |
+| George    | like  |
+| Hannah    | like  |
+| Ian       | angry |
+| Jane      | sad   |
+| Sam       | like  |
+| Anita     | wow   |
+| Brian     | love  |
+| Catherine | like  |
+| Daniel    | angry |
++-----------+-------+
+
+BETWEEN
+Write a query to find all reactions where the mood level is between 4 and 8.
+ select reaction_type,mood_level from reaction where mood_level between 4 and 8;
++---------------+------------+
+| reaction_type | mood_level |
++---------------+------------+
+| like          |          8 |
+| like          |          8 |
+| wow           |          7 |
+| love          |          6 |
+| like          |          5 |
+| angry         |          4 |
+| like          |          8 |
+| wow           |          7 |
+| like          |          6 |
++---------------+------------+
+
+AND
+Write a query to get all reactions where the type is 'like' and the mood level is above 7.
+ select reaction_type,mood_level from reaction where reaction_type ='like' and mood_level>7;
++---------------+------------+
+| reaction_type | mood_level |
++---------------+------------+
+| like          |          8 |
+| like          |          8 |
+| like          |          9 |
+| like          |          8 |
++---------------+------------+
+
+OR
+Write a query to list all reactions where the type is either 'love' or 'angry'.
+ select reaction_type from reaction where reaction_type='love' or reaction_type='angry';
++---------------+
+| reaction_type |
++---------------+
+| love          |
+| angry         |
+| love          |
+| angry         |
+| love          |
+| angry         |
++---------------+
+select 
+NOT
+Write a query to show all reactions that are not of type 'sad'.
+ select reaction_type from reaction where reaction_type !='sad';
++---------------+
+| reaction_type |
++---------------+
+| like          |
+| like          |
+| love          |
+| angry         |
+| wow           |
+| love          |
+| like          |
+| like          |
+| angry         |
+| like          |
+| wow           |
+| love          |
+| like          |
+| angry         |
++---------------+
+
+IN
+Write a query to find all reactions where the reaction type is 'like', 'wow', or 'love'.
+ select reaction_type from reaction where reaction_type in ('like','wow','love');
++---------------+
+| reaction_type |
++---------------+
+| like          |
+| like          |
+| love          |
+| wow           |
+| love          |
+| like          |
+| like          |
+| like          |
+| wow           |
+| love          |
+| like          |
++---------------+
+
+IS NULL
+Write a query to display all reactions where the comment is missing (i.e., NULL).
+ select * from reaction where comment is NULL;
++----+-----------+---------------+---------+---------------------+----------+------------+---------+
+| id | user_name | reaction_type | post_id | created_at          | location | mood_level | comment |
++----+-----------+---------------+---------+---------------------+----------+------------+---------+
+|  4 | Charlie   | angry         |     101 | 2025-08-05 09:10:00 | Chicago  |          3 | NULL    |
+|  6 | Ethan     | sad           |     104 | 2025-08-04 16:45:00 | Dallas   |          2 | NULL    |
+|  8 | George    | like          |     105 | 2025-08-03 11:25:00 | Seattle  |          5 | NULL    |
+| 11 | Jane      | sad           |     108 | 2025-08-02 18:40:00 | Atlanta  |          1 | NULL    |
+| 12 | Sam       | like          |     101 | 2025-08-07 10:50:00 | New York |          8 | NULL    |
+| 13 | Anita     | wow           |     109 | 2025-08-01 20:10:00 | Houston  |          7 | NULL    |
+| 15 | Catherine | like          |     111 | 2025-08-07 08:55:00 | New York |          6 | NULL    |
+| 16 | Daniel    | angry         |     112 | 2025-08-05 17:35:00 | Chicago  |          2 | NULL    |
++----+-----------+---------------+---------+---------------------+----------+------------+---------+
+
+IS NOT NULL
+Write a query to find all reactions that include a comment.
+ select * from reaction where comment is NOT NULL;
++----+-----------+---------------+---------+---------------------+---------------+------------+---------------------+
+| id | user_name | reaction_type | post_id | created_at          | location      | mood_level | comment             |
++----+-----------+---------------+---------+---------------------+---------------+------------+---------------------+
+|  1 | Alice     | like          |     101 | 2025-08-07 10:15:00 | New York      |          8 | Nice post!          |
+|  2 | Alice     | like          |     101 | 2025-08-07 10:15:00 | New York      |          8 | Nice post!          |
+|  3 | Bob       | love          |     102 | 2025-08-06 14:20:00 | Los Angeles   |          9 | Awesome!            |
+|  5 | Diana     | wow           |     103 | 2025-08-07 08:30:00 | Miami         |          7 | Interesting point.  |
+|  7 | Fiona     | love          |     102 | 2025-08-07 12:00:00 | Boston        |          6 | Well said.          |
+|  9 | Hannah    | like          |     106 | 2025-08-07 15:50:00 | Denver        |          9 | Completely agree!   |
+| 10 | Ian       | angry         |     107 | 2025-08-06 13:15:00 | Phoenix       |          4 | Not okay with this. |
+| 14 | Brian     | love          |     110 | 2025-08-07 09:05:00 | San Francisco |         10 | Fantastic work!     |
++----+-----------+---------------+---------+---------------------+---------------+------------+---------------------+
+
+UPPER()
+Write a query to show all usernames in uppercase.
+ select upper(user_name) from reaction ;
++------------------+
+| upper(user_name) |
++------------------+
+| ALICE            |
+| ALICE            |
+| BOB              |
+| CHARLIE          |
+| DIANA            |
+| ETHAN            |
+| FIONA            |
+| GEORGE           |
+| HANNAH           |
+| IAN              |
+| JANE             |
+| SAM              |
+| ANITA            |
+| BRIAN            |
+| CATHERINE        |
+| DANIEL           |
++------------------+
+
+LOWER()
+Write a query to show all reaction types in lowercase.
+select lower(user_name) from reaction ;
++------------------+
+| lower(user_name) |
++------------------+
+| alice            |
+| alice            |
+| bob              |
+| charlie          |
+| diana            |
+| ethan            |
+| fiona            |
+| george           |
+| hannah           |
+| ian              |
+| jane             |
+| sam              |
+| anita            |
+| brian            |
+| catherine        |
+| daniel           |
++------------------+
+
+LENGTH()
+Write a query to find all users whose usernames are longer than 6 characters.
+select * from reaction where length(user_name)>6;
++----+-----------+---------------+---------+---------------------+----------+------------+---------+
+| id | user_name | reaction_type | post_id | created_at          | location | mood_level | comment |
++----+-----------+---------------+---------+---------------------+----------+------------+---------+
+|  4 | Charlie   | angry         |     101 | 2025-08-05 09:10:00 | Chicago  |          3 | NULL    |
+| 15 | Catherine | like          |     111 | 2025-08-07 08:55:00 | New York |          6 | NULL    |
++----+-----------+---------------+---------+---------------------+----------+------------+---------+
+
+NOW()
+Write a query to find all reactions made today (based on the created_at column).
+ select * from reaction where date(created_at) = curdate();
++----+-----------+---------------+---------+---------------------+---------------+------------+--------------------+
+| id | user_name | reaction_type | post_id | created_at          | location      | mood_level | comment            |
++----+-----------+---------------+---------+---------------------+---------------+------------+--------------------+
+|  1 | Alice     | like          |     101 | 2025-08-07 10:15:00 | New York      |          8 | Nice post!         |
+|  2 | Alice     | like          |     101 | 2025-08-07 10:15:00 | New York      |          8 | Nice post!         |
+|  5 | Diana     | wow           |     103 | 2025-08-07 08:30:00 | Miami         |          7 | Interesting point. |
+|  7 | Fiona     | love          |     102 | 2025-08-07 12:00:00 | Boston        |          6 | Well said.         |
+|  9 | Hannah    | like          |     106 | 2025-08-07 15:50:00 | Denver        |          9 | Completely agree!  |
+| 12 | Sam       | like          |     101 | 2025-08-07 10:50:00 | New York      |          8 | NULL               |
+| 14 | Brian     | love          |     110 | 2025-08-07 09:05:00 | San Francisco |         10 | Fantastic work!    |
+| 15 | Catherine | like          |     111 | 2025-08-07 08:55:00 | New York      |          6 | NULL               |
++----+-----------+---------------+---------+---------------------+---------------+------------+--------------------+
+
+
+DATE()
+Write a query to extract and show only the date part from the created_at column.
+ select user_name,date(created_at) from reaction ;
++-----------+------------------+
+| user_name | date(created_at) |
++-----------+------------------+
+| Alice     | 2025-08-07       |
+| Alice     | 2025-08-07       |
+| Bob       | 2025-08-06       |
+| Charlie   | 2025-08-05       |
+| Diana     | 2025-08-07       |
+| Ethan     | 2025-08-04       |
+| Fiona     | 2025-08-07       |
+| George    | 2025-08-03       |
+| Hannah    | 2025-08-07       |
+| Ian       | 2025-08-06       |
+| Jane      | 2025-08-02       |
+| Sam       | 2025-08-07       |
+| Anita     | 2025-08-01       |
+| Brian     | 2025-08-07       |
+| Catherine | 2025-08-07       |
+| Daniel    | 2025-08-05       |
++-----------+------------------+
+
+LIKE with %
+Write a query to find all users whose name contains the substring 'an'.
+ select * from reaction where user_name like '%an%';
++----+-----------+---------------+---------+---------------------+---------------+------------+---------------------+
+| id | user_name | reaction_type | post_id | created_at          | location      | mood_level | comment             |
++----+-----------+---------------+---------+---------------------+---------------+------------+---------------------+
+|  5 | Diana     | wow           |     103 | 2025-08-07 08:30:00 | Miami         |          7 | Interesting point.  |
+|  6 | Ethan     | sad           |     104 | 2025-08-04 16:45:00 | Dallas        |          2 | NULL                |
+|  9 | Hannah    | like          |     106 | 2025-08-07 15:50:00 | Denver        |          9 | Completely agree!   |
+| 10 | Ian       | angry         |     107 | 2025-08-06 13:15:00 | Phoenix       |          4 | Not okay with this. |
+| 11 | Jane      | sad           |     108 | 2025-08-02 18:40:00 | Atlanta       |          1 | NULL                |
+| 13 | Anita     | wow           |     109 | 2025-08-01 20:10:00 | Houston       |          7 | NULL                |
+| 14 | Brian     | love          |     110 | 2025-08-07 09:05:00 | San Francisco |         10 | Fantastic work!     |
+| 16 | Daniel    | angry         |     112 | 2025-08-05 17:35:00 | Chicago       |          2 | NULL                |
++----+-----------+---------------+---------+---------------------+---------------+------------+---------------------+
+
+ROUND()
+Write a query to display each user's mood level rounded to the nearest 5.
+ select round(mood_level,5) from reaction;
++---------------------+
+| round(mood_level,5) |
++---------------------+
+|                   8 |
+|                   8 |
+|                   9 |
+|                   3 |
+|                   7 |
+|                   2 |
+|                   6 |
+|                   5 |
+|                   9 |
+|                   4 |
+|                   1 |
+|                   8 |
+|                   7 |
+|                  10 |
+|                   6 |
+|                   2 |
++---------------------+
+SUBSTR + UPPER()
+Write a query to show the first 2 letters of each user's name in uppercase.
+ select upper(substr(user_name,1,2)) from reaction;
++------------------------------+
+| upper(substr(user_name,1,2)) |
++------------------------------+
+| AL                           |
+| AL                           |
+| BO                           |
+| CH                           |
+| DI                           |
+| ET                           |
+| FI                           |
+| GE                           |
+| HA                           |
+| IA                           |
+| JA                           |
+| SA                           |
+| AN                           |
+| BR                           |
+| CA                           |
+| DA                           |
++------------------------------+
+
+NOT IN (with values)
+Write a query to find all reactions not made on posts with IDs 10, 20, or 30.
+ select * from reaction where id not in ('10','20','30');
++----+-----------+---------------+---------+---------------------+---------------+------------+--------------------+
+| id | user_name | reaction_type | post_id | created_at          | location      | mood_level | comment            |
++----+-----------+---------------+---------+---------------------+---------------+------------+--------------------+
+|  1 | Alice     | like          |     101 | 2025-08-07 10:15:00 | New York      |          8 | Nice post!         |
+|  2 | Alice     | like          |     101 | 2025-08-07 10:15:00 | New York      |          8 | Nice post!         |
+|  3 | Bob       | love          |     102 | 2025-08-06 14:20:00 | Los Angeles   |          9 | Awesome!           |
+|  4 | Charlie   | angry         |     101 | 2025-08-05 09:10:00 | Chicago       |          3 | NULL               |
+|  5 | Diana     | wow           |     103 | 2025-08-07 08:30:00 | Miami         |          7 | Interesting point. |
+|  6 | Ethan     | sad           |     104 | 2025-08-04 16:45:00 | Dallas        |          2 | NULL               |
+|  7 | Fiona     | love          |     102 | 2025-08-07 12:00:00 | Boston        |          6 | Well said.         |
+|  8 | George    | like          |     105 | 2025-08-03 11:25:00 | Seattle       |          5 | NULL               |
+|  9 | Hannah    | like          |     106 | 2025-08-07 15:50:00 | Denver        |          9 | Completely agree!  |
+| 11 | Jane      | sad           |     108 | 2025-08-02 18:40:00 | Atlanta       |          1 | NULL               |
+| 12 | Sam       | like          |     101 | 2025-08-07 10:50:00 | New York      |          8 | NULL               |
+| 13 | Anita     | wow           |     109 | 2025-08-01 20:10:00 | Houston       |          7 | NULL               |
+| 14 | Brian     | love          |     110 | 2025-08-07 09:05:00 | San Francisco |         10 | Fantastic work!    |
+| 15 | Catherine | like          |     111 | 2025-08-07 08:55:00 | New York      |          6 | NULL               |
+| 16 | Daniel    | angry         |     112 | 2025-08-05 17:35:00 | Chicago       |          2 | NULL               |
++----+-----------+---------------+---------+---------------------+---------------+------------+--------------------+
+
+COUNT and IS NULL
+Write a query to count how many reactions have no comment.
+select count(*) from reaction where comment is NULL;
++----------+
+| count(*) |
++----------+
+|        8 |
++----------+
+Create the order table 
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    product_name VARCHAR(100),
+    order_date DATETIME,
+    quantity INT,
+    price DECIMAL(10,2),
+    status VARCHAR(20),
+    shipping_address TEXT
+);
+
+Insert the data
+INSERT INTO orders (customer_name, product_name, order_date, quantity, price, status, shipping_address) VALUES
+('Alice', 'Laptop', '2025-08-07 09:00:00', 1, 1200.00, 'shipped', '123 Main St, New York'),
+('Bob', 'Phone', '2025-08-06 14:10:00', 2, 650.50, 'pending', '456 Elm St, LA'),
+('Charlie', 'Tablet', '2025-08-05 11:25:00', 1, 300.00, 'cancelled', NULL),
+('Diana', 'Monitor', '2025-08-07 15:40:00', 3, 199.99, 'shipped', '789 Pine St, Chicago'),
+('Ethan', 'Keyboard', '2025-08-03 08:20:00', 5, 49.99, 'processing', NULL),
+('Fiona', 'Mouse', '2025-08-04 10:30:00', 4, 25.00, 'shipped', '321 Oak St, Houston');
+
+LIKE
+Write a query to find all customers whose names end with 'a'.
+select * from orders where customer_name like '%a';
+Write a query to find orders where the product name contains the word 'Phone'.
+ select * from orders where product_name like '%phone%';
+Write a query to find orders where the product name is exactly 5 characters long.
+select * from orders where length(product_name)=5;
+ AS (Alias)
+Write a query to show customer name as Buyer and price as Unit_Price.
+select customer_name as Buyer,price as Unit_Price from orders;
+Write a query to show order ID and total amount (quantity × price) as Total_Cost.
+ select order_id,(quantity*price) as Total_Cost from orders;
+       NOT
+Write a query to find all orders not placed by 'Bob'.
+ select * from orders where customer_name != 'bob';
+Write a query to find orders where status is not 'shipped'.
+ select * from orders where status != 'shipped';
+AND
+Write a query to find orders with quantity greater than 2 and price less than 500.
+select * from orders where quantity>2 and price<500;
+Write a query to find orders placed by 'Alice' and status is 'shipped'.
+select * from orders where customer_name like 'alice' and status like 'shipped';
+OR
+Write a query to find orders where status is 'pending' or 'processing'.
+ select * from orders where status like 'pending' or 'processing';
+Write a query to find orders made by 'Alice' or 'Diana'.
+ select * from orders where customer_name like 'alice' or 'diana';
+IN
+Write a query to find orders for products in the categories: 'Laptop', 'Phone', or 'Tablet'.
+ select * from orders where product_name in ('laptop','phone','tablet');
+Write a query to find orders placed by customers in a given list: 'Alice', 'Bob', 'Charlie'.
+select * from orders where customer_name in('alice','bob','charlie');
+IS NULL / IS NOT NULL
+Write a query to find orders where the shipping address is missing.
+select * from orders where shipping_address is null;
+Write a query to find orders where the shipping address is provided.
+ select * from orders where shipping_address != 'null';
+FUNCTION-BASED
+Write a query to find customers whose name is longer than 5 characters.
+  select * from orders where length(customer_name) >5;
+Write a query to show all customer names in uppercase.
+ select upper(customer_name) from orders;
+Write a query to find orders where the product name is all lowercase.
+select lower(customer_name) from orders;
+Write a query to return the first 3 letters of each product name with an alias Short_Name.
+ select substring(product_name,1,3) as Short_Name from orders;
