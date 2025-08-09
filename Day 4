@@ -1,0 +1,234 @@
+Ticket table
+
+CREATE TABLE tickets (
+    ticket_id INT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    issue_type VARCHAR(50),
+    priority INT,                 -- 1 (Low), 2 (Medium), 3 (High)
+    status VARCHAR(20),          -- Open, Closed, Pending, Escalated
+    created_date DATE,
+    assigned_team VARCHAR(50),   -- Support Team names
+    location VARCHAR(50)         -- City or Branch location
+);
+
+INSERT INTO tickets (ticket_id, customer_name, issue_type, priority, status, created_date, assigned_team, location) VALUES
+(1,  'Alice',   'Network',   3, 'Open',      '2025-08-01', 'Network Team',   'New York'),
+(2,  'Bob',     'Software',  2, 'Closed',    '2025-07-28', 'Software Team',  'Chicago'),
+(3,  'Charlie', 'Hardware',  1, 'Pending',   '2025-08-02', 'Hardware Team',  'San Francisco'),
+(4,  'Diana',   'Network',   2, 'Open',      '2025-08-03', 'Network Team',   'New York'),
+(5,  'Eve',     'Software',  3, 'Closed',    '2025-07-30', 'Software Team',  'Boston'),
+(6,  'Frank',   'Software',  1, 'Pending',   '2025-08-04', 'Software Team',  'Seattle'),
+(7,  'Grace',   'Network',   2, 'Escalated', '2025-08-05', 'Network Team',   'Los Angeles'),
+(8,  'Henry',   'Hardware',  3, 'Open',      '2025-08-01', 'Hardware Team',  'Houston'),
+(9,  'Ivy',     'Network',   1, 'Closed',    '2025-07-29', 'Network Team',   'Chicago'),
+(10, 'Jack',    'Software',  3, 'Open',      '2025-08-06', 'Software Team',  'New York'),
+(11, 'Kate',    'Hardware',  2, 'Pending',   '2025-08-02', 'Hardware Team',  'Boston'),
+(12, 'Leo',     'Software',  2, 'Closed',    '2025-07-31', 'Software Team',  'San Francisco'),
+(13, 'Mona',    'Network',   3, 'Escalated', '2025-08-03', 'Network Team',   'New York'),
+(14, 'Nina',    'Hardware',  1, 'Open',      '2025-08-04', 'Hardware Team',  'Seattle'),
+(15, 'Oscar',   'Software',  3, 'Pending',   '2025-08-01', 'Software Team',  'Los Angeles'),
+(16, 'Paul',    'Network',   2, 'Closed',    '2025-07-30', 'Network Team',   'Houston'),
+(17, 'Queen',   'Hardware',  1, 'Pending',   '2025-08-05', 'Hardware Team',  'New York'),
+(18, 'Rita',    'Software',  2, 'Open',      '2025-08-06', 'Software Team',  'Chicago'),
+(19, 'Sam',     'Network',   3, 'Open',      '2025-08-07', 'Network Team',   'Boston'),
+(20, 'Tina',    'Hardware',  2, 'Escalated', '2025-08-02', 'Hardware Team',  'Seattle');
+
+
+✅ 1. Classify each ticket by urgency based on priority
+●	Priority 3 → 'High'
+●	Priority 2 → 'Medium'
+●	Priority 1 → 'Low'
+ select ticket_id, priority, case when priority=3 then 'high' when priority=2 then 'medium' when priority=1 then 'low' end as urgency from tickets;
++-----------+----------+---------+
+| ticket_id | priority | urgency |
++-----------+----------+---------+
+|         1 |        3 | high    |
+|         2 |        2 | medium  |
+|         3 |        1 | low     |
+|         4 |        2 | medium  |
+|         5 |        3 | high    |
+|         6 |        1 | low     |
+|         7 |        2 | medium  |
+|         8 |        3 | high    |
+|         9 |        1 | low     |
+|        10 |        3 | high    |
+|        11 |        2 | medium  |
+|        12 |        2 | medium  |
+|        13 |        3 | high    |
+|        14 |        1 | low     |
+|        15 |        3 | high    |
+|        16 |        2 | medium  |
+|        17 |        1 | low     |
+|        18 |        2 | medium  |
+|        19 |        3 | high    |
+|        20 |        2 | medium  |
++-----------+----------+---------+
+
+________________________________________
+✅ 2. Add a column to classify ticket status
+●	'Active' if status = 'Open' or 'Escalated'
+●	'Inactive' if status = 'Closed'
+●	'Waiting' otherwise
+select  Ticket_ID,Status,case  when Status = 'Open' OR Status = 'Escalated' then  'Active'  whenStatus = 'Closed' then 'Inactive'  else  'Waiting ' end  AS Ticket_Status from  Tickets;
++-----------+-----------+---------------+
+| Ticket_ID | Status    | Ticket_Status |
++-----------+-----------+---------------+
+|         1 | Open      | Active        |
+|         2 | Closed    | Inactive      |
+|         3 | Pending   | Waiting       |
+|         4 | Open      | Active        |
+|         5 | Closed    | Inactive      |
+|         6 | Pending   | Waiting       |
+|         7 | Escalated | Active        |
+|         8 | Open      | Active        |
+|         9 | Closed    | Inactive      |
+|        10 | Open      | Active        |
+|        11 | Pending   | Waiting       |
+|        12 | Closed    | Inactive      |
+|        13 | Escalated | Active        |
+|        14 | Open      | Active        |
+|        15 | Pending   | Waiting       |
+|        16 | Closed    | Inactive      |
+|        17 | Pending   | Waiting       |
+|        18 | Open      | Active        |
+|        19 | Open      | Active        |
+|        20 | Escalated | Active        |
++-----------+-----------+---------------+
+
+________________________________________
+✅ 3. List tickets and show issue category
+●	'Software Issue', 'Hardware Issue', 'Network Issue', or 'Other'
+________________________________________
+✅ 4. Mark tickets as "VIP" if customer name starts with A, E, M, or S
+________________________________________
+✅ 5. Show ticket summary: "High Priority Open", "Low Priority Closed", or "Other"
+________________________________________
+✅ 6. Mark follow-up required if ticket is pending or priority is high
+________________________________________
+✅ 7. Assign handling group based on issue_type
+________________________________________
+✅ 8. Label cities as "HQ" if in New York or Chicago
+________________________________________
+✅ 9. Sort tickets so 'Escalated' come first, then 'Open', then others
+________________________________________
+✅ 10. Update status to 'Urgent' if priority = 3 and status is 'Open'
+________________________________________
+✅ 11. Show how many tickets fall into each priority label
+________________________________________
+✅ 12. Show a response plan:
+●	Immediate (High + Open)
+●	Scheduled (Medium + Pending)
+●	Escalate (Low + Escalated)
+●	Standard otherwise
+________________________________________
+✅ 13. Show ticket age category
+●	If created_date is today → 'New'
+●	If more than 7 days ago → 'Old'
+●	Else → 'Recent'
+select Ticket_ID,   created_date,   case when created_date = current_date then  'New' when created_date < current_date -interval '7' day  then 'Old'  else  'Recent' end  as Age_Category from Tickets;
++-----------+--------------+--------------+
+| Ticket_ID | created_date | Age_Category |
++-----------+--------------+--------------+
+|         1 | 2025-08-01   | Recent       |
+|         2 | 2025-07-28   | Old          |
+|         3 | 2025-08-02   | Recent       |
+|         4 | 2025-08-03   | Recent       |
+|         5 | 2025-07-30   | Old          |
+|         6 | 2025-08-04   | Recent       |
+|         7 | 2025-08-05   | Recent       |
+|         8 | 2025-08-01   | Recent       |
+|         9 | 2025-07-29   | Old          |
+|        10 | 2025-08-06   | Recent       |
+|        11 | 2025-08-02   | Recent       |
+|        12 | 2025-07-31   | Old          |
+|        13 | 2025-08-03   | Recent       |
+|        14 | 2025-08-04   | Recent       |
+|        15 | 2025-08-01   | Recent       |
+|        16 | 2025-07-30   | Old          |
+|        17 | 2025-08-05   | Recent       |
+|        18 | 2025-08-06   | Recent       |
+|        19 | 2025-08-07   | Recent       |
+|        20 | 2025-08-02   | Recent       |
++-----------+--------------+--------------+
+
+________________________________________
+✅ 14. Count tickets by assigned team type: Software, Hardware, Network
+
+________________________________________
+✅ 15. Create a column with nested CASE:
+●	If Open:
+o	High → 'Critical Open'
+o	Medium → 'Important Open'
+o	Else → 'Minor Open'
+●	Else: 'Not Open'
+select   Ticket_ID,Status,Priority, case   when Status = 'Open'  then   case   when Priority = 3 then 'Critical Open'  when Priority = 2  then  'Important Open' else  'Minor Open' end else  'Not Open'   end as Open_Status_Category  from Tickets;
++-----------+-----------+----------+----------------------+
+| Ticket_ID | Status    | Priority | Open_Status_Category |
++-----------+-----------+----------+----------------------+
+|         1 | Open      |        3 | Critical Open        |
+|         2 | Closed    |        2 | Not Open             |
+|         3 | Pending   |        1 | Not Open             |
+|         4 | Open      |        2 | Important Open       |
+|         5 | Closed    |        3 | Not Open             |
+|         6 | Pending   |        1 | Not Open             |
+|         7 | Escalated |        2 | Not Open             |
+|         8 | Open      |        3 | Critical Open        |
+|         9 | Closed    |        1 | Not Open             |
+|        10 | Open      |        3 | Critical Open        |
+|        11 | Pending   |        2 | Not Open             |
+|        12 | Closed    |        2 | Not Open             |
+|        13 | Escalated |        3 | Not Open             |
+|        14 | Open      |        1 | Minor Open           |
+|        15 | Pending   |        3 | Not Open             |
+|        16 | Closed    |        2 | Not Open             |
+|        17 | Pending   |        1 | Not Open             |
+|        18 | Open      |        2 | Important Open       |
+|        19 | Open      |        3 | Critical Open        |
+|        20 | Escalated |        2 | Not Open             |
++-----------+-----------+----------+----------------------+
+
+
+________________________________________
+✅ 16. Count number of Open vs. Closed vs. Other tickets
+    
+________________________________________
+✅ 17. List all tickets and show "Assigned Team Type"
+●	If team contains "Software" → 'SW'
+●	If team contains "Hardware" → 'HW'
+●	If team contains "Network" → 'NW'
+________________________________________
+✅ 18. Get average priority per issue type
+________________________________________
+✅ 19. Show only 'Software' tickets with extra labels: 'High Risk', 'Normal', etc.
+________________________________________
+✅ 20. Display ticket_id, issue_type, and a comment:
+●	'Needs Attention' if Escalated or Pending
+●	'Resolved' if Closed
+●	'In Progress' otherwise
+ select    Ticket_ID,  issue_type,status,case when Status = 'Escalated' OR Status = 'Pending' then  'Needs Attention'  when Status = 'Closed'  then 'Resolved'  else  'In Progress'  end as  Comment from  Tickets;
++-----------+------------+-----------+-----------------+
+| Ticket_ID | issue_type | status    | Comment         |
++-----------+------------+-----------+-----------------+
+|         1 | Network    | Open      | In Progress     |
+|         2 | Software   | Closed    | Resolved        |
+|         3 | Hardware   | Pending   | Needs Attention |
+|         4 | Network    | Open      | In Progress     |
+|         5 | Software   | Closed    | Resolved        |
+|         6 | Software   | Pending   | Needs Attention |
+|         7 | Network    | Escalated | Needs Attention |
+|         8 | Hardware   | Open      | In Progress     |
+|         9 | Network    | Closed    | Resolved        |
+|        10 | Software   | Open      | In Progress     |
+|        11 | Hardware   | Pending   | Needs Attention |
+|        12 | Software   | Closed    | Resolved        |
+|        13 | Network    | Escalated | Needs Attention |
+|        14 | Hardware   | Open      | In Progress     |
+|        15 | Software   | Pending   | Needs Attention |
+|        16 | Network    | Closed    | Resolved        |
+|        17 | Hardware   | Pending   | Needs Attention |
+|        18 | Software   | Open      | In Progress     |
+|        19 | Network    | Open      | In Progress     |
+|        20 | Hardware   | Escalated | Needs Attention |
++-----------+------------+-----------+-----------------+
+
+________________________________________
